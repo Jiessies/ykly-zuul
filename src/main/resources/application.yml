@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: test-gateway-ykly-zuul
+server:
+  port: 8888
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    hostname: ${spring.cloud.client.ip-address}
+    ip-address: 127.0.0.1
+  client:
+    serviceUrl:
+       defaultZone: http://admin:123456@192.168.128.43:5701/eureka/,http://admin:123456@192.168.128.43:5702/eureka/,http://admin:123456@192.168.128.43:5702/eureka/
+ribbon:
+  ReadTimeout: 60000
+  ConnectTimeout: 5000
+
+#zuul.routes.it.path=/it/**
+#zuul.routes.it.url=http://www.ityouknow.com
+
+#zuul.routes.hello.path=/hello/**
+#zuul.routes.hello.url=http://localhost:9000/
+
+#zuul.routes.producer.path=/producer/**
+#zuul.routes.producer.serviceId=spring-cloud-producer
+
+
+
+
+
+
