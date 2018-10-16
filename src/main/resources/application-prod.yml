@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: prod-gateway-ykly-zuul
+server:
+  port: 8889
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    hostname: ${spring.cloud.client.ip-address}
+    ip-address: 172.16.21.229
+  client:
+    serviceUrl:
+       defaultZone: http://admin:123456@192.168.128.43:5701/eureka/,http://admin:123456@192.168.128.43:5702/eureka/,http://admin:123456@192.168.128.43:5702/eureka/
+ribbon:
+  ReadTimeout: 60000
+  ConnectTimeout: 5000

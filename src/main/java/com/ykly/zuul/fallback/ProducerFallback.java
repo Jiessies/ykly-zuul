@@ -1,3 +1,4 @@
+/*
 package com.ykly.zuul.fallback;
 
 import org.slf4j.Logger;
@@ -76,3 +77,4 @@ public class ProducerFallback implements FallbackProvider {
     }
 
 }
+*/
