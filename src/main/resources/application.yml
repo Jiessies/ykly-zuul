@@ -9,7 +9,9 @@ spring:
       cluster-nodes: 127.0.0.1:9200
       repositories:
         enabled: true
-
+zookeeper:
+  server: 127.0.0.1:2181
+  lockPath: /springboot/
 
 
 
