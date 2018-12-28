@@ -3,6 +3,19 @@ server:
 spring:
   application:
     name: test-gateway-zuul
+  rabbitmq:
+    host: test.rabbitmq01.yktour.com.cn
+    port: 5672
+    username: rabbit
+    password: MQ7788%%
+    publisher-confirms: true
+    virtual-host: /
+    publisher-returns: true
+    listener:
+      direct:
+        acknowledge-mode: manual
+      simple:
+        acknowledge-mode: manual
   data:
     elasticsearch:
       cluster-name: docker-cluster
@@ -12,6 +25,7 @@ spring:
 zookeeper:
   server: 127.0.0.1:2181
   lockPath: /springboot/
+
 
 
 

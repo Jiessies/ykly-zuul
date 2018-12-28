@@ -1,18 +1,21 @@
 package com.ykly.zuul.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
+import com.ykly.zuul.config.mq.AmqpConfig;
+import com.ykly.zuul.config.mq.DelayPostProcessor;
+import com.ykly.zuul.entity.MQOrderMsg;
 import com.ykly.zuul.entity.Notice;
 import com.ykly.zuul.entity.ResMsg;
 import com.ykly.zuul.repository.NoticeRepository;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,6 +27,9 @@ public class NoticeController {
 
     @Autowired
     private NoticeRepository nticeRepository;
+
+    @Autowired
+    private AmqpTemplate amqpTemplate;
 
     @GetMapping("/el/save")
     public ResMsg save(@RequestParam(value = "id") long id,
@@ -58,6 +64,18 @@ public class NoticeController {
         return ResMsg.succWithData(list);
     }
 
+    @PostMapping(value = "/send/{delayTime}")
+    public String send(@RequestBody MQOrderMsg orderMsg, @PathVariable(value = "delayTime") String delayTime) {
+        try {
+            String msg = JSON.toJSONString(orderMsg);
+            amqpTemplate.convertAndSend(AmqpConfig.DELAY_EXCHANGE, AmqpConfig.DELAY_ROUTING_KEY, msg,
+                    new DelayPostProcessor(delayTime));
+            return "发送成功";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "发送失败";
+        }
+    }
 
     @GetMapping("/")
     public ResMsg hello(){
